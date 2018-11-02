@@ -1,6 +1,6 @@
 pragma solidity ^0.4.19;
 
-import "./core/oneStepGame.sol";
+import './core/oneStepGame.sol';
 
 
 
@@ -28,10 +28,11 @@ contract myDAppGame is oneStepGame {
         config = Config({
             maxBet: 100 ether,
             minBet: 1,
-            gameDevReward: 25,
-            bankrollReward: 25,
-            platformReward: 25,
-            refererReward: 25
+            gameDevReward: 20,
+            bankrollReward: 20,
+            platformReward: 20,
+            refererReward: 20,
+            charityReward: 20
         });   
     }
 
@@ -44,7 +45,7 @@ contract myDAppGame is oneStepGame {
     function checkGameData(uint[] _gameData, uint _bet) public view returns (bool) {
         uint playerNumber = _gameData[0];
         require(_bet >= config.minBet && _bet <= config.maxBet);
-       // require(playerNumber > 0 && playerNumber < 64226);
+        require(playerNumber > 0 && playerNumber < 2);
         return true;
     }
 
@@ -56,27 +57,21 @@ contract myDAppGame is oneStepGame {
     */
     function game(uint[] _gameData, uint _bet, bytes _sigseed) public view returns(bool _win, uint _amount) {   
         checkGameData(_gameData, _bet);
-        //gameData[0] - player number  
-        uint uintSeed = bytesToUint(_sigseed);
-        uint _playerNumber = uintSeed % 100;
+        uint _min = 1;
+        uint _max = 2;
+        uint _rndNumber = generateRnd(_sigseed, _min, _max);
+        //gameData[0] - player number    
+        uint _playerNumber = _gameData[0];
         uint _profit = getProfit(_gameData, _bet);
 
         // Game logic
-        if (_playerNumber > 55) {
+        if (_playerNumber > _rndNumber) {
             // player win profit
             return(true, _profit);
         } else {
             // player lose bet
             return(false, _bet);
         }
-    }
-
-    function bytesToUint(bytes b) public returns (uint256){
-        uint256 number;
-        for(uint i = 0; i < b.length; i++){
-            number = number + uint(b[i])*(2**(8*(b.length-(i+1))));
-        }
-        return number;
     }
 
     /** 
@@ -88,5 +83,17 @@ contract myDAppGame is oneStepGame {
     function getProfit(uint[] _gameData, uint _bet) public pure returns(uint _profit) {
         uint _playerNumber = _gameData[0];
         _profit = (_bet.mul(uint(65535).mul(10000).div(_playerNumber)).div(10000)).sub(_bet);
+    }
+
+    /**
+    @notice Generate random number from sig
+    @param _sigseed Sign hash for creation random number
+    @param _min Minimal random number
+    @param _max Maximal random number
+    @return random number
+    */
+    function generateRnd(bytes _sigseed, uint _min, uint _max) public pure returns(uint) {
+        require(_max < 2**128);
+        return uint256(keccak256(_sigseed)) % (_max.sub(_min).add(1)).add(_min);
     }
 }
