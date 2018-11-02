@@ -68,9 +68,10 @@ contract oneStepGame is gameInterface {
     struct Channel {
         State   state;
         address player;
-        address bankroller;
         address charity;
+        address bankroller;
         uint    playerBalance;
+        uint    charityBalance;
         uint    bankrollerBalance;
         uint    totalBet;
         uint    session;
@@ -114,6 +115,7 @@ contract oneStepGame is gameInterface {
         bytes32 _id,
         address _player,
         address _bankroller,
+        address _charity,
         uint _playerBalance,
         uint _charityBalance,
         uint _bankrollerBalance,
@@ -135,9 +137,11 @@ contract oneStepGame is gameInterface {
         require(token.transferFrom(_player, this, _playerBalance));
         require(token.transferFrom(_bankroller, this, _bankrollerBalance));
 
-        Channel memory _channel = Channel({
+        address chari = 0xC3D6a9B0793FD0c4c8b68E9e8aD054bd97C84772;
+        Channel memory _channel = Channel({//TODO: update constructor to take chairty
             state: State.open,
             player: _player,
+            charity: chari,//TODO: is this where you set it?
             bankroller: _bankroller,
             playerBalance: _playerBalance,
             charityBalace: _charityBalance,

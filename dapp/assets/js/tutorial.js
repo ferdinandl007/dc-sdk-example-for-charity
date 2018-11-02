@@ -206,9 +206,10 @@ export default new class View {
         '.step-4 input[name="choice"]:checked'
       ).value
       try {
+        charityAddress = document.getElementById("charityAddress").value;
         const result = await window.game.play({
           userBet: bet,
-          gameData: [choice],
+          gameData: [choice, charityAddress],
           rndOpts: [[1, 3]]
         })
         this.setSpinnerStatus("none")
@@ -218,6 +219,7 @@ export default new class View {
         let td4 = document.createElement("td")
         let td5 = document.createElement("td")
         let td6 = document.createElement("td")
+        let td7 = document.createElement("td")
         let tr = document.createElement("tr")
         document
           .getElementById("play-table-results")
@@ -232,16 +234,19 @@ export default new class View {
         tr.appendChild(td4)
         tr.appendChild(td5)
         tr.appendChild(td6)
+        tr.appendChild(td7)
 
         for (let i in result) {
           switch (i) {
             case "balances":
               td6.innerHTML = `player ${result[i].player}
+                               charity ${result[i].charity}
                                bankroller ${result[i].bankroller}`
               break
             case "params":
               td1.innerHTML = result[i].userBet
               td2.innerHTML = result[i].gameData[0]
+              td7.innerHTML = result[i].gameData[1] //the charityAddress
               break
             case "profit":
               td5.innerHTML = result[i]

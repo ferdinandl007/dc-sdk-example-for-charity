@@ -73,6 +73,7 @@ module.exports = {
         inputs: [
           { name: "_id", type: "bytes32" },
           { name: "_playerBalance", type: "uint256" },
+          { name: "_charityBalance", type: "uint256" },
           { name: "_bankrollerBalance", type: "uint256" },
           { name: "_totalBet", type: "uint256" },
           { name: "_session", type: "uint256" },
@@ -107,8 +108,10 @@ module.exports = {
         outputs: [
           { name: "state", type: "uint8" },
           { name: "player", type: "address" },
+          { name: "charity", type: "address" },
           { name: "bankroller", type: "address" },
           { name: "playerBalance", type: "uint256" },
+          { name: "charityBalance", type: "uint256" },
           { name: "bankrollerBalance", type: "uint256" },
           { name: "totalBet", type: "uint256" },
           { name: "session", type: "uint256" },
@@ -145,7 +148,8 @@ module.exports = {
         inputs: [
           { name: "_id", type: "bytes32" },
           { name: "_playerBalance", type: "uint256" },
-          { name: "_bankrollerBalance", type: "uint256" },
+          { name: "charityBalance", type: "uint256" },
+          { name: "bankrollerBalance", type: "uint256" },
           { name: "_totalBet", type: "uint256" },
           { name: "_session", type: "uint256" },
           { name: "_close", type: "bool" },
@@ -189,8 +193,10 @@ module.exports = {
         inputs: [
           { name: "_id", type: "bytes32" },
           { name: "_player", type: "address" },
+          { name: "charity", type: "address" },
           { name: "_bankroller", type: "address" },
           { name: "_playerBalance", type: "uint256" },
+          { name: "charityBalance", type: "uint256" },
           { name: "_bankrollerBalance", type: "uint256" },
           { name: "_openingBlock", type: "uint256" },
           { name: "_gameData", type: "uint256[]" },
@@ -249,6 +255,7 @@ module.exports = {
           { indexed: false, name: "action", type: "string" },
           { indexed: false, name: "id", type: "bytes32" },
           { indexed: false, name: "playerBalance", type: "uint256" },
+          { indexed: false, name: "charityBalance", type: "uint256" },
           { indexed: false, name: "bankrollerBalance", type: "uint256" },
           { indexed: false, name: "session", type: "uint256" }
         ],
